@@ -121,6 +121,17 @@ void draw() {
   strokeWeight(2);
   circle(circleX, circleY, circleSize);
   image(plusIcon, 13.5, 128);
+
+  if (circle2Over) {
+    fill(rectHighlight);
+  } else {
+     fill(rectColor);
+  }
+  
+  stroke(67);
+  strokeWeight(2);
+  circle(circle2X, circle2Y, circleSize);
+  image(plusIcon, 13.5, 128);
   
   if(drawMode) {
       if (mousePressed && !rectOver && !rect2Over && !circleOver) {
@@ -183,6 +194,11 @@ void mousePressed() {
   if(circleOver && drawMode) {
     stroke+=2;
   }
+
+  if(circle2Over && drawMode) {
+    stroke-=2;
+  }
+
   if (drawMode) {
     currentColor = rectHighlight;
   }
