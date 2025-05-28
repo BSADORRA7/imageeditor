@@ -4,11 +4,13 @@ int rectX, rectY, rect2X, rect2Y;
 int circleX, circleY;
 int imgX, imgY; // Position of square button
 int rectSize = 50;     // Diameter of rect
+int circleSize = 30;
 color rectColor, baseColor;
 color rectHighlight;
 color currentColor;
+int stroke = 1;
 int[] penModes = {ROUND, SQUARE, PROJECT};
-boolean rectOver = false, rect2Over, drawMode = false;
+boolean rectOver = false, rect2Over, circleOver = false, drawMode = false;
 ColorPicker hs1, hs2, hs3;  // Two scrollbars
 
 void setup() {
@@ -16,11 +18,12 @@ void setup() {
   img = loadImage("new-york-city.jpg");
   //img = loadImage("AFCEAN_SBITDay_OliverSandorra_Photo.jpg");
   //img = loadImage("group-of-happy-multiethnic-business-people-showing-sign-of-success.png");
-  //img = loadImage("images.jpg");
+  img = loadImage("images.jpg");
   //img = loadImage("Stuart_Duncan_(Judge)_(cropped).jpg");
   //img = loadImage("download-1.jpg");
   drawIcon = loadImage("draw_icon.png");
   penIcon = loadImage("pen_icon.png");
+  plusIcon = loadImage("plus_icon.png");
   currentPen = 0;
   
   hs1 = new ColorPicker(100, height/2-8, 500, 16, 16);
@@ -35,6 +38,8 @@ void setup() {
   rectY = 10;
   rect2X = 10;
   rect2Y = 65;
+  circleX = 20;
+  circleY = 135;
   ellipseMode(CENTER);
   drawStuff();
   //drawSliders();
@@ -57,6 +62,7 @@ void drawStuff() {
   }
   drawIcon.resize(50, 50);
   penIcon.resize(50, 50);
+  plusIcon.resize(15,15);
   noLoop();
 }
 
@@ -103,9 +109,20 @@ void draw() {
   rect(rect2X, rect2Y, rectSize, rectSize, 5);
   image(penIcon, 10, 65);
   
+  if (circleOver) {
+    fill(rectHighlight);
+  } else {
+     fill(rectColor);
+  }
+  
+  stroke(67);
+  strokeWeight(2);
+  circle(circleX, circleY, circleSize);
+  image(plusIcon, 13.5, 128);
+  
   if(drawMode) {
-      if (mousePressed) {
-        strokeWeight(10);
+      if (mousePressed && !rectOver && !rect2Over && !circleOver) {
+        strokeWeight(stroke);
         strokeCap(penModes[currentPen]);
         System.out.println("drawing...");
         stroke(85, 163, 209);
@@ -122,13 +139,20 @@ void update(int x, int y) {
   if ( overRect(rectX, rectY, rectSize, rectSize) ) {
     rectOver = true;
     rect2Over = false;
+    circleOver = false;
   } 
   else if ( overRect(rect2X, rect2Y, rectSize, rectSize) ) {
     rect2Over = true;
     rectOver = false;
+    circleOver = false;
+  }
+  else if (overCircle(circleX, circleY, circleSize)) {
+    rect2Over = false;
+    rectOver = false;
+    circleOver = true;
   }
   else {
-    rectOver = rect2Over = false;
+    rectOver = rect2Over = circleOver = false;
   }
 }
 
@@ -138,7 +162,7 @@ void mousePressed() {
     System.out.println(drawMode);
   }
   
-  if(rect2Over) {
+  if(rect2Over && drawMode) {
     if (currentPen != 2) {
       currentPen += 1;
     }
@@ -146,6 +170,9 @@ void mousePressed() {
     System.out.println(currentPen);
   }
   
+  if(circleOver && drawMode) {
+    stroke+=2;
+  }
   if (drawMode) {
     currentColor = rectHighlight;
   }
