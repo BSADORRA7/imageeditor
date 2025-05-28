@@ -1,7 +1,7 @@
 PImage img, drawIcon, penIcon, plusIcon;
 int currentPen;
 int rectX, rectY, rect2X, rect2Y;
-int circleX, circleY;
+int circleX, circleY, circle2X, circle2Y;
 int imgX, imgY; // Position of square button
 int rectSize = 50;     // Diameter of rect
 int circleSize = 30;
@@ -10,7 +10,7 @@ color rectHighlight;
 color currentColor;
 int stroke = 1;
 int[] penModes = {ROUND, SQUARE, PROJECT};
-boolean rectOver = false, rect2Over, circleOver = false, drawMode = false;
+boolean rectOver = false, rect2Over, circleOver = false, circle2Over = false, drawMode = false;
 ColorPicker hs1, hs2, hs3;  // Two scrollbars
 
 void setup() {
@@ -39,6 +39,8 @@ void setup() {
   rect2X = 10;
   rect2Y = 65;
   circleX = 20;
+  circleY = 135;
+  circleX = 75;
   circleY = 135;
   ellipseMode(CENTER);
   drawStuff();
@@ -140,19 +142,27 @@ void update(int x, int y) {
     rectOver = true;
     rect2Over = false;
     circleOver = false;
+    circle2Over = false;
   } 
   else if ( overRect(rect2X, rect2Y, rectSize, rectSize) ) {
     rect2Over = true;
     rectOver = false;
     circleOver = false;
+    circle2Over = false;
   }
   else if (overCircle(circleX, circleY, circleSize)) {
     rect2Over = false;
     rectOver = false;
     circleOver = true;
+    circle2Over = false;
   }
+  else if (overCircle(circle2X, circle2Y, circleSize)) {
+    rect2Over = false;
+    rectOver = false;
+    circleOver = false;
+    circle2Over = true;
   else {
-    rectOver = rect2Over = circleOver = false;
+    rectOver = rect2Over = circleOver = circle2Over = false;
   }
 }
 
